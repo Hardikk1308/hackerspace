@@ -14,43 +14,53 @@ class WalletFundingWidget extends StatefulWidget {
 
 class _WalletFundingWidgetState extends State<WalletFundingWidget> {
   bool _isFunding = false;
-  bool _isGeneratingKeypair = false; // New loading state for keypair generation
-  double _balance = 0.0; // Initialize balance as double
-  final TextEditingController _publicKeyController = TextEditingController(); // Controller for public key input
+  bool _isGeneratingKeypair = false;
+  double _balance = 0.0;
+  final TextEditingController _publicKeyController = TextEditingController();
 
   Future<void> _generateKeypair() async {
     setState(() {
-      _isGeneratingKeypair = true; // Set loading state for keypair generation
+      _isGeneratingKeypair = true;
     });
 
     try {
       final response = await http.post(
-        Uri.parse('http://192.168.67.15:3001/create-keypair'), // Replace with your backend URL
+        Uri.parse('http://192.168.67.15:3001/create-keypair'),
         headers: {
           'Content-Type': 'application/json',
         },
       );
 
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        // Populate the public key controller with the generated public key
-        _publicKeyController.text = data['publicKey'];
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Keypair created successfully!')),
-        );
+        if (data.containsKey('publicKey')) {
+          _publicKeyController.text = data['publicKey'];
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Keypair created successfully!')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('publicKey not found in response')),
+          );
+        }
       } else {
         final errorData = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorData['error'] ?? 'Failed to create keypair')),
+          SnackBar(
+              content: Text(errorData['error'] ?? 'Failed to create keypair')),
         );
       }
     } catch (e) {
+      print('Error generating keypair: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error generating keypair: ${e.toString()}')),
       );
     } finally {
       setState(() {
-        _isGeneratingKeypair = false; // Reset loading state
+        _isGeneratingKeypair = false;
       });
     }
   }
@@ -71,7 +81,8 @@ class _WalletFundingWidgetState extends State<WalletFundingWidget> {
 
     try {
       final response = await http.post(
-        Uri.parse('https://friendbot.diamcircle.io/?addr=$publicKey'), // Replace with your backend URL if different
+        Uri.parse(
+            'https://friendbot.diamcircle.io/?addr=$publicKey'), // Replace with your backend URL if different
         headers: {
           'Content-Type': 'application/json',
         },
@@ -97,7 +108,8 @@ class _WalletFundingWidgetState extends State<WalletFundingWidget> {
       } else {
         final errorData = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorData['error'] ?? 'Failed to fund wallet')),
+          SnackBar(
+              content: Text(errorData['error'] ?? 'Failed to fund wallet')),
         );
       }
     } catch (e) {
@@ -134,7 +146,8 @@ class _WalletFundingWidgetState extends State<WalletFundingWidget> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView( // To handle overflow when keyboard appears
+          child: SingleChildScrollView(
+            // To handle overflow when keyboard appears
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -178,7 +191,6 @@ class _WalletFundingWidgetState extends State<WalletFundingWidget> {
                   onPressed: _copyPublicKey,
                   child: const Text('Copy Public Key'),
                 ),
-                
               ],
             ),
           ),

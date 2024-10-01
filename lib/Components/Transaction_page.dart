@@ -157,7 +157,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
         backgroundColor: Color(0xFF16213E),
       ),
       body: Container(
-        color: Color(0xFF1A1A2E),
+        color: Colors.white,
         child: _isFetching && _transactions.isEmpty
             ? Center(child: CircularProgressIndicator())
             : RefreshIndicator(
@@ -177,7 +177,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
 
                     final tx = _transactions[index];
                     return Card(
-                      color: Color(0xFF0F3460),
+                      color: Color(0xFF16213E),
                       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       child: ListTile(
                         leading: Icon(
@@ -186,7 +186,7 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
                         ),
                         title: Text(
                           '${_capitalize(tx.type)} - ${tx.amount > 0 ? '+' : ''}${tx.amount.toStringAsFixed(2)} DIAM',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                         subtitle: Text(
                           tx.description.isNotEmpty

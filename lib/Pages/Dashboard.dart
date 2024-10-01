@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:secure_pay/Components/Manage_crypto.dart';
@@ -109,7 +108,7 @@ class _DashboardScreenState extends State<DashboardScreen> with RouteAware {
             });
 
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Native asset balance not found.')),
+              const SnackBar(content: Text('Native asset balance not found.')),
             );
           }
         } else {
@@ -146,7 +145,7 @@ class _DashboardScreenState extends State<DashboardScreen> with RouteAware {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('DIAM Wallet Dashboard'),
+        title: const Text('DIAM Wallet '),
         actions: [
           IconButton(
             icon: Icon(Icons.refresh),
@@ -159,7 +158,7 @@ class _DashboardScreenState extends State<DashboardScreen> with RouteAware {
           padding: EdgeInsets.zero,
           children: <Widget>[
             const DrawerHeader(
-              decoration: BoxDecoration(color: Colors.blue),
+              decoration: BoxDecoration(color: Colors.grey),
               child: Text('DIAM Wallet',
                   style: TextStyle(color: Colors.white, fontSize: 24)),
             ),
@@ -197,9 +196,10 @@ class _DashboardScreenState extends State<DashboardScreen> with RouteAware {
                 Navigator.pop(context);
                 if (_publicKey.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(
-                            'Please fund your wallet to view transactions')),
+                    const SnackBar(
+                      content:
+                          Text('Please fund your wallet to view transactions'),
+                    ),
                   );
                   return;
                 }
@@ -258,14 +258,13 @@ class _DashboardScreenState extends State<DashboardScreen> with RouteAware {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'Welcome, Company Name',
+                'Welcome, marcos',
                 style: Theme.of(context).textTheme.headline5,
               ),
               const SizedBox(height: 20),
               _buildBalanceCard(), // Displays the balance
               const SizedBox(height: 20),
               _buildActionButtons(context), // Action buttons grid
-              // Removed _buildRecentTransactions() as per previous instructions
             ],
           ),
         ),
